@@ -17,7 +17,7 @@ addCells(36)
 // get number of cells
 var len = board.cells.length
 
-// function to assign row values based on the number of cell
+// function to assign row values based on the number of cells
 function addRowValues () {
   //loop through cells. Use Math.sqrt to assign the correct row number
   board.cells.forEach(cell => {
@@ -36,6 +36,9 @@ function addRowValues () {
     }
   })
 }
+//call addRowValues
+addRowValues()
+
 // function for asigning col values 
 function addColValues () {
   // modulo of dividing cell index number by sqrt of number of cells. Assign result as col value.
@@ -43,32 +46,33 @@ function addColValues () {
     cell.col = board.cells.indexOf(cell) % Math.sqrt(len)
   })
 }
-
-//set number of mines
-var  numMines = 5
-
-//function for asigning isMine property
-function addIsMine () {
-  if(numMines > 0){
-    board.cells.forEach(cell => {
-      //random number generator
-      var rand = Math.floor(Math.random() * 100)
-      if (rand < 20 && numMines > 0) {
-        cell.isMine = true
-        numMines -= 1
-      } else {
-        cell.isMine = false
-      }
-    })
-  }
-  if(numMines > 0){addIsMine()}
-}
-
-//call functions to add properties to cells 
-addIsMine()
-addRowValues()
+//call adColValues
 addColValues()
+
+//add isMine property to all cells
+function addIsMineProperty() {
+  board.cells.forEach(cell => {
+    cell.isMine = false
+  })
+}
+//call addIsMineProperty
+addIsMineProperty()
+
 //console.log(board.cells)
+
+function addMines() {
+  //Add mines randomly
+  for (var i=0; i<8; i++) {
+    var cellIndex = Math.floor(Math.random() * 36);
+    var cell = board.cells[cellIndex];
+    cell.isMine = true;
+  }
+  //console.log(cell)
+}
+//Call addMines
+addMines()
+
+
 
 //hidden and marked properties added to cells
 board.cells.forEach(cell => cell.hidden = true)
