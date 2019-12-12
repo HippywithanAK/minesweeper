@@ -67,7 +67,7 @@ var numMines = 5;
 //set array to add cell index's to
 var mineArray = []
 
-
+// function to create an array of cell index's
 function buildMineArray () {
     // add as many cell index's to mineArray as numMines is set to
     mineArray = []
@@ -78,11 +78,11 @@ function buildMineArray () {
     }
 }
 
-
+//function for adding mines to board
 function addMines() {
   buildMineArray()
   console.log("mineArray: " + mineArray)
-  // check for duplicates in mineArray. If duplicates exist call addMines to get a new array.
+  // check for duplicates in mineArray. If duplicates exist, build new mineArry and re-run addMines to get a new array.
   let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
   duplicateArray = []
   duplicateArray = findDuplicates(mineArray)
@@ -106,8 +106,12 @@ addMines()
 board.cells.forEach(cell => cell.hidden = true)
 board.cells.forEach(cell => cell.isMarked = false)
 
+
+
 function startGame () {
   // Don't remove this function call: it makes the game work!
+  document.addEventListener('click', checkForWin);
+  document.addEventListener('contextmenu', checkForWin);
   lib.initBoard()
 }
 
@@ -129,8 +133,6 @@ function checkForWin () {
   lib.displayMessage('You win!');
 }
  
-
-// call checkForWin()
 checkForWin()
 
 // Define this function to count the number of mines around the cell
