@@ -115,11 +115,6 @@ function startGame () {
 //
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
-
-// Define this function to look for a win condition:
-//
-// 1. Are all of the cells that are NOT mines visible?
-// 2. Are all of the mines marked?
 function checkForWin () {
   for (let i = 0; i < board['cells'].length; i++) {
     if(board.cells[i].isMine && !board.cells[i].isMarked) {
