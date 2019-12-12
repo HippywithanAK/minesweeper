@@ -12,7 +12,8 @@ function addCells (num) {
   } else {console.log("number of cells must be square!")}
 }
 // call addCells with desired number of cells
-addCells(36)
+var numCells = 36;
+addCells(numCells);
 
 // get number of cells
 var len = board.cells.length
@@ -60,21 +61,48 @@ addIsMineProperty()
 
 //console.log(board.cells)
 
-function addMines() {
-  //Add mines randomly
-  for (var i=0; i<8; i++) {
-    var cellIndex = Math.floor(Math.random() * 36);
-    var cell = board.cells[cellIndex];
-    cell.isMine = true;
-  }
-  //console.log(cell)
+//set number of mines
+var numMines = 5;
+
+//set array to add cell index's to
+var mineArray = []
+
+
+function buildMineArray () {
+    // add as many cell index's to mineArray as numMines is set to
+    mineArray = []
+    for(i=0; i < numMines; i++){
+      var cellIndex = Math.ceil(Math.random() * numCells) - 1
+      console.log("cellIndex: " + cellIndex)
+      mineArray.push(cellIndex)
+    }
 }
+
+
+function addMines() {
+  buildMineArray()
+  console.log("mineArray: " + mineArray)
+  // check for duplicates in mineArray. If duplicates exist call addMines to get a new array.
+  let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
+  duplicateArray = []
+  duplicateArray = findDuplicates(mineArray)
+  console.log('duplicateArray Length: ' + duplicateArray.length)
+  if(duplicateArray.length > 0) {
+    buildMineArray()
+    addMines()
+  } else{
+      for(i=0;i<mineArray.length;i++) {
+        var index = mineArray[i] 
+        console.log("index: " + index)
+        board['cells'][index].isMine = true
+      }
+  }   
+}
+
 //Call addMines
 addMines()
 
-
-
-//hidden and marked properties added to cells
+//hidden and isMarked properties added to cells
 board.cells.forEach(cell => cell.hidden = true)
 board.cells.forEach(cell => cell.isMarked = false)
 
@@ -88,16 +116,27 @@ function startGame () {
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
 
-function checkForWin () { 
-  //check if each cell is not hidden and not a mine, or, it is a mine and is marked
-  board.cells.forEach(cell => {
-    if(!cell.hidden && !cell.isMine ){
-      lib.displayMessage("You Win!")
-    } 
-  })
-      // You can use this function call to declare a winner (once you've
-  // detected that they've won, that is! 
+// Define this function to look for a win condition:
+//
+// 1. Are all of the cells that are NOT mines visible?
+// 2. Are all of the mines marked?
+
+function checkForWin () {
+  // loop through cells
+  for (let i = 0; i < board['cells'].length; i++) {
+    if((board.cells[i].isMine && !board.cells[i].isMarked) || (board.cells[i].hidden && !board.cells[i].isMine)) {
+      return;
+    }
+    //if(board.cells[i].hidden && !board.cells[i].isMine){
+      //return;
+    //}
+  //}
+  // You can use this function call to declare a winner (once you've
+  // detected that they've won, that is!)
+  lib.displayMessage('You win!');
+  }
 }  
+ 
 
 // call checkForWin()
 checkForWin()
@@ -125,4 +164,3 @@ function countSurroundingMines (cell) {
 board.cells.forEach(cell => {
   cell.surroundingMines = countSurroundingMines({row: cell.row, col: cell.col})
 })
-//console.log(countSurroundingMines({row: 0, col: 1}))
